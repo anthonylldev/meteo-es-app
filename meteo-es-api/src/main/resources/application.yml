@@ -1,3 +1,12 @@
 spring:
   application:
     name: meteo-es-api
+
+logging:
+  level:
+    root: INFO
+    com.anthonylldev.meteoesapi: INFO
+
+aemet:
+  base-url: "https://opendata.aemet.es/opendata"
+  api-key: ${AEMET_API_KEY}
