@@ -7,6 +7,11 @@ logging:
     root: INFO
     com.anthonylldev.meteoesapi: INFO
 
+
 aemet:
   base-url: "https://opendata.aemet.es/opendata"
   api-key: ${AEMET_API_KEY}
+
+cors:
+  allowed-methods: ${ALLOWED_METHODS}
+  allowed-origins: ${ALLOWED_ORIGINS}
