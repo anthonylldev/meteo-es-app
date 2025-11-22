@@ -1,0 +1,7 @@
+<p-card>
+  <meteo-es-municipality-name-filter [(municipality)]="municipality"/>
+
+  @if (municipality) {
+    <p>{{ municipality.name }}</p>
+  }
+</p-card>
