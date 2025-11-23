@@ -1,0 +1,71 @@
+name: CI - Lint, Test & Build
+
+on:
+  push:
+    branches: ["develop", "main"]
+  pull_request:
+    branches: ["develop", "main"]
+
+jobs:
+  frontend:
+    name: Frontend - Lint & Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: meteo-es-ui
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: 'meteo-es-ui/.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: 'meteo-es-ui/package-lock.json'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run Linter
+        run: npm run lint
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Upload Frontend Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: meteo-es-ui/dist/
+
+  backend:
+    name: Backend - Lint, Test & Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: meteo-es-api
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Grant execute permission to gradlew
+        run: chmod +x gradlew
+
+      - name: Lint & Test
+        run: ./gradlew check test
+
+      - name: Build JAR
+        run: ./gradlew build
+
+      - name: Upload Backend Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: meteo-es-api/build/libs/
