@@ -4,7 +4,7 @@ import {TemperatureUnit, TemperatureUnitPipe} from "@components/temperature-unit
 import {ForecastService} from '@components/forecast/services';
 import {IForecast} from '@components/forecast/model';
 import {finalize, Subscription} from 'rxjs';
-import {DatePipe, DecimalPipe} from '@angular/common';
+import {DatePipe, DecimalPipe, PercentPipe} from '@angular/common';
 import {TableModule} from 'primeng/table';
 
 @Component({
@@ -13,7 +13,8 @@ import {TableModule} from 'primeng/table';
     TemperatureUnitPipe,
     DatePipe,
     DecimalPipe,
-    TableModule
+    TableModule,
+    PercentPipe
   ],
   templateUrl: './forecast.html',
   styleUrl: './forecast.scss',

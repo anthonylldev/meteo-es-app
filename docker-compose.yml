@@ -14,11 +14,34 @@ services:
       - meteo-network
 
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      test: [ "CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1" ]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 10s
+
+  meteo-ui:
+    build:
+      context: meteo-es-ui
+      dockerfile: Dockerfile
+    image: meteo-es-ui:latest
+    container_name: meteo-ui
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    networks:
+      - meteo-network
+
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost/" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+    depends_on:
+      meteo-api:
+        condition: service_healthy
 
 networks:
   meteo-network:
