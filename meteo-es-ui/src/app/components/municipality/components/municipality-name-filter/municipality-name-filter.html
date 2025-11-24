@@ -1,0 +1,13 @@
+@let municipalityData = municipality();
+
+<p-auto-complete
+  placeholder="Municipality name filter..."
+  optionLabel="name"
+  class="w-full"
+  (onSelect)="municipalityChange.emit($event.value)"
+  [fluid]="true"
+  [ngModel]="municipalityData"
+  [suggestions]="items"
+  [delay]="3"
+  [minQueryLength]="3"
+  (completeMethod)="search($event)"/>

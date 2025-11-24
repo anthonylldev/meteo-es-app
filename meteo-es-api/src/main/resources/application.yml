@@ -1,3 +1,27 @@
 spring:
   application:
     name: meteo-es-api
+
+logging:
+  level:
+    root: INFO
+    com.anthonylldev.meteoesapi: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health"
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+
+aemet:
+  base-url: "https://opendata.aemet.es/opendata"
+  api-key: ${AEMET_API_KEY}
+
+cors:
+  allowed-methods: ${ALLOWED_METHODS}
+  allowed-origins: ${ALLOWED_ORIGINS}
