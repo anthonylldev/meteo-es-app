@@ -1,0 +1,14 @@
+@let temperatureUnitData = temperatureUnit();
+
+<p-button (onClick)="menu.toggle($event)">
+  <span>{{ temperatureUnitData | temperatureUnit }}</span>
+  <i class="pi pi-angle-down"></i>
+</p-button>
+
+<p-menu #menu [model]="items" [popup]="true" appendTo="body">
+  <ng-template #item let-item>
+    <a pRipple class="p-menu-item-link">
+      <span>{{ item.label | temperatureUnit }}</span>
+    </a>
+  </ng-template>
+</p-menu>
