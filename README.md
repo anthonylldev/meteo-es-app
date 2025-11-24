@@ -1,3 +1,5 @@
+[![CI - Lint, Test & Build](https://github.com/anthonylldev/meteo-es-app/actions/workflows/ci.yml/badge.svg)](https://github.com/anthonylldev/meteo-es-app/actions/workflows/ci.yml) [![CD - Build & Push Docker Images](https://github.com/anthonylldev/meteo-es-app/actions/workflows/cd.yml/badge.svg)](https://github.com/anthonylldev/meteo-es-app/actions/workflows/cd.yml)
+
 # 🌦️ Meteo ES -- Aplicación Meteorológica
 
 Aplicación compuesta por una **API backend** y una **interfaz frontend**
@@ -137,3 +139,32 @@ Esta red permite la comunicación interna entre `meteo-api` y `meteo-ui`.
   iniciar.
 - El backend y frontend reinician automáticamente gracias a `restart: unless-stopped`.
 - Si cambias las rutas, deberías además editar el `nginx.conf` en `meteo-es-app/meteo-es-ui`.
+
+Las imágenes están subidas a un registry, por lo que pueden descargarse directamente sin necesidad de construirlas localmente.
+
+Si decides descargarlas manualmente, puedes hacerlo con:
+
+docker pull ghcr.io/anthonylldev/meteo-es-ui
+docker pull ghcr.io/anthonylldev/meteo-es-api
+
+Si vas a usar docker compose con imágenes descargadas directamente, deberás asegurarte de que el archivo docker-compose.yml no incluya secciones build: para meteo-api o meteo-ui, de modo que Compose utilice exclusivamente las imágenes del registry.
+
+---
+
+📄 Consideraciones adicionales
+
+Aunque utilices imágenes preconstruidas, deberás crear igualmente el archivo `.env` con la configuración necesaria.
+
+Si modificas las rutas o necesitas ajustar parámetros del Nginx que sirve la UI, tendrás que montar un volumen para reemplazar el fichero `default.conf` dentro del contenedor de `meteo-ui`.
+
+Ejemplo:
+
+```yml
+services:
+  meteo-ui:
+    image: ghcr.io/anthonylldev/meteo-es-ui
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+```
+
+Esto permite personalizar las rutas sin necesidad de reconstruir la imagen.
