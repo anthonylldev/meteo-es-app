@@ -16,7 +16,7 @@
           <tr>
             @for (item of forecastData.precipitationProbability; track item.period) {
               <th class="p-3 font-bold">
-                {{ item.probability | number: '1.2-2' }}
+                {{ item.probability | percent }}
               </th>
             }
           </tr>
