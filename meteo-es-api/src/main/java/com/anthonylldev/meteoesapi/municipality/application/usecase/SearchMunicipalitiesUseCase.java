@@ -3,18 +3,18 @@ package com.anthonylldev.meteoesapi.municipality.application.usecase;
 import com.anthonylldev.meteoesapi.municipality.application.dto.MunicipalityDto;
 import com.anthonylldev.meteoesapi.municipality.application.mapper.MunicipalityMapper;
 import com.anthonylldev.meteoesapi.municipality.application.port.in.SearchMunicipalitiesPort;
-import com.anthonylldev.meteoesapi.municipality.application.port.out.GetMunicipalityGateway;
-import org.springframework.stereotype.Component;
+import com.anthonylldev.meteoesapi.municipality.application.port.out.MunicipalityGateway;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 public class SearchMunicipalitiesUseCase implements SearchMunicipalitiesPort {
 
-    private final GetMunicipalityGateway municipalityGateway;
+    private final MunicipalityGateway municipalityGateway;
     private final MunicipalityMapper mapper;
 
-    public SearchMunicipalitiesUseCase(GetMunicipalityGateway municipalityGateway, MunicipalityMapper mapper) {
+    public SearchMunicipalitiesUseCase(MunicipalityGateway municipalityGateway, MunicipalityMapper mapper) {
         this.municipalityGateway = municipalityGateway;
         this.mapper = mapper;
     }

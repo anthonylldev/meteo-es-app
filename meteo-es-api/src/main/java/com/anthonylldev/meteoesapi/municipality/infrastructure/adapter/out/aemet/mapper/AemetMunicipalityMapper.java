@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AemetMunicipalityMapper {
+
     public Municipality toMunicipality(AemetMunicipalityDto dto) {
         return new Municipality(extractMunicipalityCode(dto.id()), dto.nombre());
     }
@@ -20,6 +21,6 @@ public class AemetMunicipalityMapper {
             throw new InvalidMunicipalityIdException(rawId);
         }
 
-        return rawId.substring(rawId.length() - 3);
+        return rawId.substring(rawId.length() - 5);
     }
 }

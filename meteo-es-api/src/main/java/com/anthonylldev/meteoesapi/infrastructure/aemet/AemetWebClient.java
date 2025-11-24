@@ -1,6 +1,8 @@
 package com.anthonylldev.meteoesapi.infrastructure.aemet;
 
+import com.anthonylldev.meteoesapi.forecast.infrastructure.adapter.out.aemet.dto.AemetWeatherDto;
 import com.anthonylldev.meteoesapi.infrastructure.aemet.dto.AemetMetadataDto;
+import com.anthonylldev.meteoesapi.infrastructure.aemet.exception.AemetInvalidDataException;
 import com.anthonylldev.meteoesapi.infrastructure.aemet.exception.AemetRateLimitExceededException;
 import com.anthonylldev.meteoesapi.municipality.infrastructure.adapter.out.aemet.dto.AemetMunicipalityDto;
 import org.springframework.stereotype.Component;
@@ -41,5 +43,35 @@ public class AemetWebClient {
                         .filter(AemetRateLimitExceededException.class::isInstance))
                 .collectList()
                 .block();
+    }
+
+    public AemetMetadataDto getForecastMetadata(String municipalityCode) {
+        return client.get()
+                .uri("/api/prediccion/especifica/municipio/horaria/" + municipalityCode)
+                .retrieve()
+                .onStatus(s -> s.value() == 429, r -> Mono.error(new AemetRateLimitExceededException()))
+                .bodyToMono(AemetMetadataDto.class)
+                .retryWhen(Retry.backoff(2, Duration.ofSeconds(30))
+                        .filter(AemetRateLimitExceededException.class::isInstance))
+                .block();
+    }
+
+    public AemetWeatherDto getWeather(String url) {
+        var result = client.get()
+                .uri(url)
+                .retrieve()
+                .onStatus(s -> s.value() == 429, r -> Mono.error(new AemetRateLimitExceededException()))
+                .bodyToFlux(AemetWeatherDto.class)
+                .retryWhen(Retry.backoff(2, Duration.ofSeconds(30))
+                        .filter(AemetRateLimitExceededException.class::isInstance))
+                .collectList()
+                .block();
+
+
+        if (result == null || result.isEmpty()) {
+            throw new AemetInvalidDataException();
+        }
+
+        return result.getFirst();
     }
 }
