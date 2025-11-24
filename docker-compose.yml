@@ -1,0 +1,25 @@
+services:
+  meteo-api:
+    build:
+      context: meteo-es-api
+      dockerfile: Dockerfile
+    image: meteo-es-api:latest
+    container_name: meteo-api
+    ports:
+      - "8080:8080"
+    env_file:
+      - meteo-es-api/.env
+    restart: unless-stopped
+    networks:
+      - meteo-network
+
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  meteo-network:
+    driver: bridge
