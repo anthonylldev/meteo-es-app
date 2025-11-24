@@ -1,9 +1,9 @@
 package com.anthonylldev.meteoesapi.infrastructure.rest.handler;
 
+import com.anthonylldev.meteoesapi.infrastructure.aemet.exception.AemetInvalidDataException;
 import com.anthonylldev.meteoesapi.infrastructure.aemet.exception.AemetRateLimitExceededException;
 import com.anthonylldev.meteoesapi.infrastructure.rest.dto.ErrorResponseDto;
-import com.anthonylldev.meteoesapi.municipality.infrastructure.adapter.out.aemet.exception.AemetInvalidMetadataException;
-import com.anthonylldev.meteoesapi.municipality.infrastructure.adapter.out.aemet.exception.AemetInvalidMunicipalityDataException;
+import com.anthonylldev.meteoesapi.infrastructure.aemet.exception.AemetInvalidMetadataException;
 import com.anthonylldev.meteoesapi.municipality.infrastructure.adapter.out.aemet.exception.InvalidMunicipalityIdException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -40,11 +40,11 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(AemetInvalidMunicipalityDataException.class)
-    public ResponseEntity<ErrorResponseDto> handleAemetInvalidMunicipalityDataException(AemetInvalidMunicipalityDataException e) {
-        log.error("Invalid municipality received from AEMET: {}", e.getMessage());
+    @ExceptionHandler(AemetInvalidDataException.class)
+    public ResponseEntity<ErrorResponseDto> handleAemetInvalidDataException(AemetInvalidDataException e) {
+        log.error("Invalid data received from AEMET: {}", e.getMessage());
         return ResponseEntity.badRequest().body(
-                new ErrorResponseDto(AEMET_INVALID_MUNICIPALITY_DATA.name(), e.getMessage())
+                new ErrorResponseDto(AEMET_INVALID_DATA.name(), e.getMessage())
         );
     }
 }

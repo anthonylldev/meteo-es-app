@@ -1,4 +1,4 @@
-package com.anthonylldev.meteoesapi.municipality.infrastructure.adapter.out.aemet.exception;
+package com.anthonylldev.meteoesapi.infrastructure.aemet.exception;
 
 public class AemetInvalidMetadataException extends RuntimeException {
     public AemetInvalidMetadataException() {

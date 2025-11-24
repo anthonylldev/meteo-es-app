@@ -4,6 +4,6 @@ import com.anthonylldev.meteoesapi.municipality.domain.model.Municipality;
 
 import java.util.List;
 
-public interface GetMunicipalityGateway {
+public interface MunicipalityGateway {
     List<Municipality> getMunicipalities();
 }

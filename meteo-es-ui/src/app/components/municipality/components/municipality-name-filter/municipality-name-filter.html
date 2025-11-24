@@ -4,6 +4,7 @@
   placeholder="Municipality name filter..."
   optionLabel="name"
   (onSelect)="municipalityChange.emit($event.value)"
+  [fluid]="true"
   [ngModel]="municipalityData"
   [suggestions]="items"
   [delay]="3"

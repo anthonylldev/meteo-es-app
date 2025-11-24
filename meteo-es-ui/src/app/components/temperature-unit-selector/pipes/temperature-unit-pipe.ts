@@ -5,13 +5,13 @@ import {TemperatureUnit} from '@components/temperature-unit-selector';
   name: 'temperatureUnit'
 })
 export class TemperatureUnitPipe implements PipeTransform {
-  transform(value: TemperatureUnit): string {
+  transform(value: TemperatureUnit | string): string {
     if (value === TemperatureUnit.CELSIUS) {
-      return 'C°';
+      return '°C';
     }
 
     if (value === TemperatureUnit.FAHRENHEIT) {
-      return 'F°';
+      return '°F';
     }
 
     return value;
