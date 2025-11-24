@@ -1,0 +1,43 @@
+@let forecastData = forecast();
+
+@if (forecastData) {
+  <div class="flex flex-column justify-content-center align-items-center gap-3 px-2 py-4">
+    <h2 class="m-0">{{ forecastData.date | date:"MMMM dd',' yyyy" }}</h2>
+
+    <div class="flex flex-row">
+      <h1 class="m-0 text-7xl">{{ forecastData.averageTemperature | number:'1.2-2' }}</h1>
+      <p class="m-0 text-4xl">{{ forecastData.temperatureUnit | temperatureUnit }}</p>
+    </div>
+
+    <div class="p-datatable p-component p-datatable-gridlines p-datatable-striped p-datatable-sm">
+      <div class="p-datatable-wrapper">
+        <table class="p-datatable-table" style="text-align: center; width: 100%;">
+          <thead class="p-datatable-thead">
+          <tr>
+            @for (item of forecastData.precipitationProbability; track item.period) {
+              <th class="p-3 font-bold">
+                {{ item.probability | number: '1.2-2' }} %
+              </th>
+            }
+          </tr>
+          </thead>
+
+          <tbody class="p-datatable-tbody">
+          <tr>
+            @for (item of forecastData.precipitationProbability; track item.period) {
+              <td class="p-2">
+                {{ item.period }}
+              </td>
+            }
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+} @else {
+  <div class="flex justify-content-center align-items-center p-3">
+    <i class="pi pi-spin pi-spinner"></i>
+  </div>
+}
