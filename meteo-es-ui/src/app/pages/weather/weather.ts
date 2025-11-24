@@ -16,6 +16,6 @@ import {Forecast} from '@components/forecast';
   styleUrl: './weather.scss',
 })
 export class Weather {
-  municipality?: IMunicipality = { code: '28079', name: 'Madrid' };
+  municipality?: IMunicipality;
   temperatureUnit = TemperatureUnit.CELSIUS;
 }

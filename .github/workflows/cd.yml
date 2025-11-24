@@ -1,0 +1,53 @@
+name: CD - Build & Push Docker Images
+
+on:
+  workflow_run:
+    workflows: [ "CI - Lint, Test & Build" ]
+    types:
+      - completed
+
+jobs:
+  docker:
+    name: Build & Push Images
+    runs-on: ubuntu-latest
+
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./meteo-es-ui
+          file: ./meteo-es-ui/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/meteo-es-ui:latest
+            ghcr.io/${{ github.repository_owner }}/meteo-es-ui:${{ github.event.workflow_run.head_sha }}
+
+      - name: Build backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./meteo-es-api
+          file: ./meteo-es-api/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/meteo-es-api:latest
+            ghcr.io/${{ github.repository_owner }}/meteo-es-api:${{ github.event.workflow_run.head_sha }}
